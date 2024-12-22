@@ -1,0 +1,5 @@
+**/obj/
+**/obj/**/*.nuget.cache
+**/bin/
+.DS_Store
+*.sln

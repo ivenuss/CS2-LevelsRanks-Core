@@ -328,7 +328,6 @@ public class Database
         return user;
     }
 
-
     public async Task<(int totalPlayers, int playerRank)> GetPlayerRankAndTotalPlayersAsync(string steamId)
     {
         var totalPlayers = 0;
@@ -358,6 +357,33 @@ public class Database
         }
 
         return (totalPlayers, playerRank);
+    }
+
+    public async Task<int> GetPlayerPositionAsync(string steamId)
+    {
+        var playerPosition = 0;
+
+        try
+        {
+            using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            var positionQuery = $@"
+                SELECT COUNT(*) + 1
+                FROM `{_tableName}`
+                WHERE value > (SELECT value FROM `{_tableName}` WHERE steam = @SteamId)";
+            using var positionCommand = new MySqlCommand(positionQuery, connection);
+
+            positionCommand.Parameters.AddWithValue("@SteamId", steamId);
+
+            playerPosition = Convert.ToInt32(await positionCommand.ExecuteScalarAsync());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error in GetPlayerPositionAsync: {ex}");
+        }
+
+        return playerPosition;
     }
 
     public async Task<List<User>> GetTopPlayersByExperience(int topN)

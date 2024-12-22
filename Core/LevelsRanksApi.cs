@@ -56,6 +56,11 @@ public class LevelsRanksApi : ILevelsRanksApi
         return await _levelsRanks.Database.GetCurrentRanksAsync();
     }
 
+    public async Task<int> GetPlayerPositionAsync(string steamId)
+    {
+        return await _levelsRanks.Database.GetPlayerPositionAsync(steamId);
+    }
+
     public ulong ConvertToSteamId64(string steamId)
     {
         return SteamIdConverter.ConvertToSteamId64(steamId);
@@ -85,11 +90,11 @@ public class LevelsRanksApi : ILevelsRanksApi
     {
         return _levelsRanks.GetExperienceMultiplier(steamId);
     }
-    
+
     public bool GetExperienceFromBots()
     {
         return _levelsRanks.ExperienceFromBots;
-    }  
-    
+    }
+
     public ConcurrentDictionary<string, User> OnlineUsers => _levelsRanks.OnlineUsers;
 }
