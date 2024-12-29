@@ -758,10 +758,15 @@ public class LevelsRanks : BasePlugin
                 break;
             case "1":
             {
+                int minUnrankedKills = (int)ExperienceSettings.GetExperience("1", "lr_unranked_min_kills");
+                int unrankedExpReward = (int)ExperienceSettings.GetExperience("1", "lr_unranked");
+                bool isUnrankedReward = attacker.Kills < minUnrankedKills || victim.Kills < minUnrankedKills;
+
                 var killCoefficient =
                     Math.Max(0.5, Math.Min(2.0, ExperienceSettings.GetExperience("1", "lr_killcoeff")));
-                expAttacker = Math.Max(1, (int)Math.Round((float)victim.Value / attacker.Value * 5.0));
-                expVictim = -Math.Max(1, (int)Math.Round(expAttacker * killCoefficient));
+
+                expAttacker = isUnrankedReward ? unrankedExpReward : Math.Max(1, (int)Math.Round((float)victim.Value / attacker.Value * 5.0));
+                expVictim = -(isUnrankedReward ? unrankedExpReward : Math.Max(1, (int)Math.Round(expAttacker * killCoefficient)));
             }
                 break;
             case "2":

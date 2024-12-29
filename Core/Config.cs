@@ -100,6 +100,8 @@ public class ExperienceConfig
 
     public Dictionary<string, double> Rating_Extended { get; set; } = new()
     {
+        { "lr_unranked_min_kills", 50 },
+        { "lr_unranked", 2 },
         { "lr_killcoeff", 1.0 },
         { "lr_headshot", 1 },
         { "lr_assist", 1 },
